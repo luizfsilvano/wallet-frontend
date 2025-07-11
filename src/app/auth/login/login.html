@@ -1,0 +1,35 @@
+<div class="auth-container">
+    <div class="auth-modal">
+      <h2>Login</h2>
+      
+      <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="auth-form">
+        <div class="form-group">
+          <label for="loginUsername">Usuário:</label>
+          <input 
+            type="text" 
+            id="loginUsername" 
+            name="username"
+            [(ngModel)]="loginData.username"
+            required>
+        </div>
+  
+        <div class="form-group">
+          <label for="loginPassword">Senha:</label>
+          <input 
+            type="password" 
+            id="loginPassword" 
+            name="password"
+            [(ngModel)]="loginData.password"
+            required>
+        </div>
+  
+        <button type="submit" class="btn btn-primary btn-full" [disabled]="!loginForm.valid">
+          Entrar
+        </button>
+      </form>
+      
+      <p class="auth-switch">
+        Não tem uma conta? <a routerLink="/register">Crie uma aqui</a>
+      </p>
+    </div>
+  </div>
