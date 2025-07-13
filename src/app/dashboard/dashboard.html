@@ -1,39 +1,133 @@
 <div class="dashboard-container">
-  <header class="dashboard-header">
-    <h1>Meu Dashboard</h1>
-    <button class="btn-logout" (click)="logout()">Sair</button>
-  </header>
-
-  <main class="dashboard-content">
-    <div class="wallet-creator card">
-      <h3>Criar Nova Carteira</h3>
-      <form (ngSubmit)="createWallet()">
-        <div class="form-group">
-          <label for="balance">Saldo Inicial:</label>
-          <input
-            type="number"
-            id="balance"
-            name="balance"
-            [(ngModel)]="newWalletBalance"
-            required
-          />
-        </div>
-        <button type="submit" class="btn btn-primary">Criar Carteira</button>
-      </form>
+  <nav class="sidebar" [class.collapsed]="isSidebarCollapsed">
+    <div class="sidebar-header">
+      <div class="logo">
+        <i class="fas fa-wallet"></i>
+        <span class="logo-text">WalletPay</span>
+      </div>
+      <button class="toggle-btn" (click)="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+      </button>
     </div>
 
-    <div class="wallet-list card">
-      <h3>Minhas Carteiras</h3>
-      <div *ngIf="wallets.length === 0" class="empty-state">
-        <p>Você ainda não tem nenhuma carteira. Crie uma acima!</p>
+    <ul class="sidebar-menu">
+      <li
+        class="menu-item"
+        [class.active]="activeSection === 'resumo'"
+        (click)="setActiveSection('resumo')"
+      >
+        <i class="fas fa-chart-pie"></i>
+        <span>Resumo</span>
+      </li>
+      <li
+        class="menu-item"
+        [class.active]="activeSection === 'carteiras'"
+        (click)="setActiveSection('carteiras')"
+      >
+        <i class="fas fa-wallet"></i>
+        <span>Carteiras</span>
+      </li>
+      <li
+        class="menu-item"
+        [class.active]="activeSection === 'transacoes'"
+        (click)="setActiveSection('transacoes')"
+      >
+        <i class="fas fa-exchange-alt"></i>
+        <span>Transações</span>
+      </li>
+      <li class="menu-item logout" (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Sair</span>
+      </li>
+    </ul>
+  </nav>
+
+  <main class="main-content">
+    <header class="content-header">
+      <div class="header-left">
+        <h1 id="section-title">{{ sectionTitles[activeSection] }}</h1>
+      </div>
+    </header>
+
+    <div class="content-body">
+      <div
+        id="resumo-section"
+        class="section"
+        [class.active]="activeSection === 'resumo'"
+      >
+        <h2>Visão Geral</h2>
       </div>
 
-      <ul *ngIf="wallets.length > 0">
-        <li *ngFor="let wallet of wallets" class="wallet-item">
-          <span>Carteira ID: {{ wallet.id }}</span>
-          <strong>Saldo: R$ {{ wallet.balance | number : "1.2-2" }}</strong>
-        </li>
-      </ul>
+      <div
+        id="carteiras-section"
+        class="section"
+        [class.active]="activeSection === 'carteiras'"
+      >
+        <div class="section-actions">
+          <button class="btn btn-primary" (click)="openCreateWalletModal()">
+            <i class="fas fa-plus"></i>
+            Nova Carteira
+          </button>
+        </div>
+
+        <div class="wallets-grid">
+          <a
+            *ngFor="let wallet of wallets"
+            [routerLink]="['/wallet', wallet.id]"
+            class="wallet-card-link"
+          >
+            <div class="wallet-card">
+              <div class="wallet-header">
+                <h3>Carteira ID: {{ wallet.id }}</h3>
+              </div>
+              <div class="wallet-balance">
+                <span class="balance-label">Saldo Atual</span>
+                <span class="balance-value"
+                  >R$ {{ wallet.balance | number : "1.2-2" }}</span
+                >
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div
+        id="transacoes-section"
+        class="section"
+        [class.active]="activeSection === 'transacoes'"
+      >
+        <h3>Gráfico de Transações</h3>
+      </div>
     </div>
   </main>
+</div>
+
+<div class="modal-overlay" [class.active]="isCreateWalletModalVisible">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Nova Carteira</h3>
+      <button class="modal-close" (click)="closeCreateWalletModal()">
+        &times;
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Saldo Inicial</label>
+        <input
+          type="number"
+          class="form-control"
+          placeholder="0.00"
+          [(ngModel)]="newWalletBalance"
+        />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="closeCreateWalletModal()">
+        Cancelar
+      </button>
+      <button class="btn btn-primary" (click)="createWallet()">
+        Criar Carteira
+      </button>
+    </div>
+  </div>
 </div>

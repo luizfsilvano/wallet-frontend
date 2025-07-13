@@ -1,20 +1,33 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../auth/auth';
 import { WalletService } from '../wallet/wallet';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CurrencyPipe, DecimalPipe, RouterLink],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss'],
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
+  // Controle da UI
+  isSidebarCollapsed = false;
+  activeSection = 'resumo'; // Seção inicial
+  sectionTitles: { [key: string]: string } = {
+    resumo: 'Dashboard',
+    carteiras: 'Minhas Carteiras',
+    transacoes: 'Transações',
+  };
+
+  // Dados
   wallets: any[] = [];
-  newWalletBalance: number = 0;
+
+  // Controle de Modais
+  isCreateWalletModalVisible = false;
+  newWalletBalance = 0;
 
   constructor(
     private router: Router,
@@ -26,34 +39,43 @@ export class DashboardComponent {
     this.loadWallets();
   }
 
-  createWallet(): void {
-    this.walletService.createWallet(this.newWalletBalance).subscribe({
-      next: (newWallet) => {
-        console.log('Nova carteira criada!', newWallet);
-        alert('Carteira criada com sucesso!');
-        this.newWalletBalance = 0;
-        this.loadWallets();
-      },
-      error: (err) => {
-        console.error('Erro ao criar carteira!', err);
-        alert('Ocorreu um erro ao criar a carteira.');
-      },
-    });
+  // Lógica da UI
+  toggleSidebar(): void {
+    this.isSidebarCollapsed = !this.isSidebarCollapsed;
   }
 
+  setActiveSection(section: string): void {
+    this.activeSection = section;
+  }
+
+  openCreateWalletModal(): void {
+    this.isCreateWalletModalVisible = true;
+  }
+
+  closeCreateWalletModal(): void {
+    this.isCreateWalletModalVisible = false;
+  }
+
+  // Lógica de Dados
   loadWallets(): void {
     this.authService.getWallets().subscribe({
       next: (wallets) => {
         this.wallets = [...wallets];
-        console.log(
-          'Carteiras carregadas e prontas para exibir!',
-          this.wallets
-        );
+        console.log('Carteiras carregadas!', this.wallets);
       },
-      error: (err) => {
-        console.error('Erro ao carregar carteiras!', err);
-        alert('Ocorreu um erro ao carregar as carteiras. Verifique o console.');
+      error: (err) => console.error('Erro ao carregar carteiras!', err),
+    });
+  }
+
+  createWallet(): void {
+    this.walletService.createWallet(this.newWalletBalance).subscribe({
+      next: () => {
+        alert('Carteira criada com sucesso!');
+        this.closeCreateWalletModal();
+        this.loadWallets(); // Recarrega a lista
+        this.newWalletBalance = 0;
       },
+      error: (err) => alert(`Erro ao criar carteira: ${err.message}`),
     });
   }
 

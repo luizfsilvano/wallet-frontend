@@ -1,0 +1,67 @@
+<div class="details-container">
+  <header class="details-header">
+    <button class="btn-back" (click)="goBack()">
+      &larr; Voltar ao Dashboard
+    </button>
+    <h1>Detalhes da Carteira #{{ walletId }}</h1>
+  </header>
+
+  <div class="details-content">
+    <div class="card transaction-form">
+      <h3>Nova Transação</h3>
+      <form (ngSubmit)="createTransaction()">
+        <div class="form-group">
+          <label for="amount">Valor:</label>
+          <input
+            type="number"
+            id="amount"
+            name="amount"
+            [(ngModel)]="transactionData.amount"
+          />
+        </div>
+        <div class="form-group">
+          <label for="type">Tipo:</label>
+          <select id="type" name="type" [(ngModel)]="transactionData.type">
+            <option value="CREDIT">Crédito</option>
+            <option value="DEBIT">Débito</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-submit">Realizar Transação</button>
+      </form>
+    </div>
+
+    <div class="card transaction-history">
+      <h3>Histórico de Transações</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Tipo</th>
+            <th>Status</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tx of transactions">
+            <td>{{ tx.dateTime | date : "dd/MM/yyyy HH:mm" }}</td>
+            <td>
+              <span class="tx-type" [ngClass]="tx.type.toLowerCase()">{{
+                tx.type
+              }}</span>
+            </td>
+            <td>{{ tx.status }}</td>
+            <td class="tx-amount" [ngClass]="tx.type.toLowerCase()">
+              {{ tx.type === "CREDIT" ? "+" : "-" }} R$
+              {{ tx.amount | number : "1.2-2" }}
+            </td>
+          </tr>
+          <tr *ngIf="transactions.length === 0">
+            <td colspan="4" class="empty-state">
+              Nenhuma transação encontrada para esta carteira.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
