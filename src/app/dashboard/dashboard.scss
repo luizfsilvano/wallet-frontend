@@ -1,0 +1,108 @@
+.dashboard-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1rem;
+  font-family: "Open Sans", sans-serif;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #eee;
+
+  h1 {
+    font-family: "Montserrat", sans-serif;
+    color: #2c3e50;
+  }
+}
+
+.btn-logout {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #e74c3c;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #c0392b;
+  }
+}
+
+.card {
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+
+  h3 {
+    font-family: "Montserrat", sans-serif;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.form-group {
+  margin-bottom: 1rem;
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  input {
+    width: 100%;
+    max-width: 300px;
+    padding: 0.75rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+}
+
+.btn-primary {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  background: #3498db;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.wallet-list {
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+}
+
+.wallet-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  span {
+    color: #7f8c8d;
+  }
+  strong {
+    font-size: 1.2rem;
+    color: #2ecc71;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: #7f8c8d;
+}

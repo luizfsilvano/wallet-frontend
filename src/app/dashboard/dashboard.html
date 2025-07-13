@@ -1,5 +1,39 @@
-<div style="text-align: center; padding: 50px;">
-    <h1>Bem-vindo ao seu Dashboard!</h1>
-    <p>Login realizado com sucesso.</p>
-    <button (click)="logout()">Sair</button>
-  </div>
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <h1>Meu Dashboard</h1>
+    <button class="btn-logout" (click)="logout()">Sair</button>
+  </header>
+
+  <main class="dashboard-content">
+    <div class="wallet-creator card">
+      <h3>Criar Nova Carteira</h3>
+      <form (ngSubmit)="createWallet()">
+        <div class="form-group">
+          <label for="balance">Saldo Inicial:</label>
+          <input
+            type="number"
+            id="balance"
+            name="balance"
+            [(ngModel)]="newWalletBalance"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Criar Carteira</button>
+      </form>
+    </div>
+
+    <div class="wallet-list card">
+      <h3>Minhas Carteiras</h3>
+      <div *ngIf="wallets.length === 0" class="empty-state">
+        <p>Você ainda não tem nenhuma carteira. Crie uma acima!</p>
+      </div>
+
+      <ul *ngIf="wallets.length > 0">
+        <li *ngFor="let wallet of wallets" class="wallet-item">
+          <span>Carteira ID: {{ wallet.id }}</span>
+          <strong>Saldo: R$ {{ wallet.balance | number : "1.2-2" }}</strong>
+        </li>
+      </ul>
+    </div>
+  </main>
+</div>
