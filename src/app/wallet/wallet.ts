@@ -10,6 +10,10 @@ export class WalletService {
 
   constructor(private http: HttpClient) {}
 
+  getWallets(): Observable<any> {
+    return this.http.get(this.apiUrl);
+  }
+
   createWallet(initialBalance: number): Observable<any> {
     const walletData = { balance: initialBalance };
     return this.http.post(this.apiUrl, walletData);

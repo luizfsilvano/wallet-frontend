@@ -14,6 +14,10 @@ import { TransactionService } from '../../transaction/transaction';
 export class WalletDetailsComponent implements OnInit {
   walletId: number | null = null;
   transactions: any[] = [];
+  currentPage = 0;
+  totalPages = 0;
+  totalElements = 0;
+  pageSize = 4;
   transactionData = {
     amount: 0,
     type: 'CREDIT' as 'CREDIT' | 'DEBIT',
@@ -34,18 +38,34 @@ export class WalletDetailsComponent implements OnInit {
     });
   }
 
-  loadTransactions(): void {
+  loadTransactions(page: number = 0): void {
     if (!this.walletId) return;
 
     this.transactionService
-      .getTransactionsForWallet(this.walletId, 0, 20)
+      .getTransactionsForWallet(this.walletId, page, this.pageSize)
       .subscribe({
         next: (response) => {
           this.transactions = response.content;
+          this.currentPage = response.number;
+          this.totalPages = response.totalPages;
+          this.totalElements = response.totalElements;
+
           console.log('Transações carregadas:', this.transactions);
         },
         error: (err) => console.error('Erro ao carregar transações', err),
       });
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages - 1) {
+      this.loadTransactions(this.currentPage + 1);
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 0) {
+      this.loadTransactions(this.currentPage - 1);
+    }
   }
 
   createTransaction(): void {

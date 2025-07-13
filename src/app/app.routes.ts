@@ -12,7 +12,7 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
 
   {
-    path: 'wallet/id',
+    path: 'wallet/:id',
     component: WalletDetailsComponent,
     canActivate: [authGuard],
   },

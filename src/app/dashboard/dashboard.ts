@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../auth/auth';
-import { WalletService } from '../wallet/wallet';
+import { WalletService } from '../wallet/wallet'; // Apenas o WalletService é necessário para os dados
 import { Router, RouterLink } from '@angular/router';
 
 @Component({
@@ -13,9 +12,9 @@ import { Router, RouterLink } from '@angular/router';
   styleUrls: ['./dashboard.scss'],
 })
 export class DashboardComponent implements OnInit {
-  // Controle da UI
+  // Controlo da UI
   isSidebarCollapsed = false;
-  activeSection = 'resumo'; // Seção inicial
+  activeSection = 'resumo';
   sectionTitles: { [key: string]: string } = {
     resumo: 'Dashboard',
     carteiras: 'Minhas Carteiras',
@@ -25,15 +24,12 @@ export class DashboardComponent implements OnInit {
   // Dados
   wallets: any[] = [];
 
-  // Controle de Modais
+  // Controlo de Modais
   isCreateWalletModalVisible = false;
   newWalletBalance = 0;
 
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-    private walletService: WalletService
-  ) {}
+  // O construtor agora só precisa do Router e do WalletService
+  constructor(private router: Router, private walletService: WalletService) {}
 
   ngOnInit(): void {
     this.loadWallets();
@@ -43,22 +39,20 @@ export class DashboardComponent implements OnInit {
   toggleSidebar(): void {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
   }
-
   setActiveSection(section: string): void {
     this.activeSection = section;
   }
-
   openCreateWalletModal(): void {
     this.isCreateWalletModalVisible = true;
   }
-
   closeCreateWalletModal(): void {
     this.isCreateWalletModalVisible = false;
   }
 
   // Lógica de Dados
   loadWallets(): void {
-    this.authService.getWallets().subscribe({
+    // CORREÇÃO: Usando o walletService para buscar as carteiras
+    this.walletService.getWallets().subscribe({
       next: (wallets) => {
         this.wallets = [...wallets];
         console.log('Carteiras carregadas!', this.wallets);
